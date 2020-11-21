@@ -1,0 +1,125 @@
+.main {
+    display: block;
+    max-height: 100vh;
+    width: 100%;
+    overflow-y: scroll;
+    scroll-behavior: auto;
+    .spacer{
+        flex: 1 0 auto;
+    }
+    .add-image{
+        position: fixed;
+        z-index: 99;
+        // background-color: white;
+        height: 50px;
+        width: 50px;
+        bottom: 10px;
+        right: 20px;
+        border-radius: 60px;
+    }
+    .fa-image{
+        position: relative;
+        right: 1.5px;
+    }
+    .loader{
+        height: 80vh;
+    }
+    .thumb{
+        margin-bottom: 30px;
+    }
+    .photo-column{
+        background-image: url(../../assets/images/loader.gif);
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;
+        overflow: hidden;
+        position: relative;
+    }
+    .photo-view{
+        height: 270px;
+        // display: block;
+        // margin-left: auto;
+        // margin-right: auto;
+        // width: 40%;
+    }
+    .share{
+        z-index: 99;
+        visibility: hidden;
+        opacity: 0;
+        transition: visibility 0s, opacity 0.5s linear;
+        height: 50px;
+        width: 50px;
+        top: 5px;
+        right: 5px;
+        position: absolute;
+        border-radius: 60px;
+    }
+    .preview{
+        z-index: 99;
+        visibility: hidden;
+        opacity: 0;
+        transition: visibility 0s, opacity 0.5s linear;
+        height: 50px;
+        width: 50px;
+        top: 5px;
+        left: 5px;
+        position: absolute;
+        border-radius: 60px;
+    }
+    .fa-share-alt{
+        position: relative;
+        top: 2px;
+        right: 2px;
+        font-size: 24px;
+    }
+    .fa-eye{
+        position: relative;
+        top: 2px;
+        right: 2px;
+        font-size: 24px;
+    }
+    .photo-column:hover .share, .photo-column:hover .preview{
+        visibility: visible;
+        opacity: 1;
+    }
+    // Large devices (desktops, less than 1200px)
+    @media (max-width: 1199.98px) { 
+        .photo-view{
+            height: 280px;
+        }
+    }
+
+    // Medium devices (tablets, less than 992px)
+    @media (max-width: 991.98px) { 
+        .photo-view{
+            height: 250px;
+        }
+    }
+    // Small devices (landscape phones, less than 768px)
+    @media (max-width: 767.98px) { 
+        .photo-view{
+            height: 220px;
+        }
+    }
+    // Small devices (landscape phones, 576px and up)
+    @media (max-width: 575.98px) { 
+        .photo-view{
+            height: 200px;
+        }
+    }
+    .message{
+        position: fixed;
+        bottom: 5px;
+        width: 99%;
+        z-index: 999;
+        margin: 0px 10px;
+    }
+
+}
+.image{
+    height: 200px;
+    width: 250px;
+}
+.photo-preview{
+    height: 250px;
+}

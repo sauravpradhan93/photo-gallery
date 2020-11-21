@@ -1,0 +1,123 @@
+<div class="main" scrollable (scrollPosition)="scrollHandler($event)">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light" #nav>
+    <a class="navbar-brand" href="#">Photo Gallery</a>
+    <span class="spacer"></span>
+    <button class="btn btn-outline-success my-2 my-sm-0" type="button" (click)="logout()">Logout</button>
+  </nav>
+  <button type="button" class="btn btn-primary btn-lg add-image" (click)="openUploadDialog(uploadPicture)">
+      <i class="far fa-image"></i>
+  </button>
+
+  <div class="d-flex justify-content-center align-items-center loader" *ngIf="dataLoading">
+    <div class="spinner-border" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
+  </div>
+  <div>
+  </div>
+  <div class="d-flex justify-content-center align-items-center loader" *ngIf="!dataLoading && imagesData?.length == 0">
+    <h3 class="text-center">Press Image Button to upload your images</h3>
+  </div>
+
+  <div class="d-flex flex-row mx-2 mt-3" *ngIf="!dataLoading && imagesData?.length > 0">
+    <h3>Filter By</h3>
+    <div class="form-group ml-2">
+      <select class="form-control" [(ngModel)]="filterBy" (change)="filterByData()">
+        <option selected [value]="'recently'">Recently</option>
+        <option selected [value]="'time'">TIme</option>
+        <option [value]="'face'">Face</option>
+        <option [value]="'place'">Place</option>
+        <option [value]="'share'">Most Share</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="mt-1" *ngIf="!dataLoading && imagesData?.length > 0">
+      <div class="row m-0">
+        <div *ngFor="let photo of (imagesData | arrange: arrageBy)" class="col-xl-2 col-lg-3 col-md-4 col-sm-4 col-xs-6 col-6 p-1 text-center">
+          <div class="card photo-column">
+            <img [src]="photo?.imageUrl" class="card-img-top photo-view" [alt]="photo?.filename">
+            <button type="button" class="btn btn-light share" (click)="share(photo)">
+              <i class="fas fa-share-alt"></i>
+            </button>
+            <button type="button" class="btn btn-light preview" (click)="previewDialog(previewImage, photo)">
+              <i class="far fa-eye"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+  </div>
+
+  <input type="file" #imageUpload hidden accept="image/x-png,image/gif,image/jpeg" (change)="getPicture($event)">
+  <ng-template #uploadPicture let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Upload Picture</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <form [formGroup]="uploadForm" (ngSubmit)="submit(uploadForm.value)">
+      <div class="modal-body">
+          <div class="form-group">
+            <div class="d-flex flex-column justify-content-center align-items-center">
+              <img [src]="imagePath" alt="image" class="image">
+              <button type="button" class="btn btn-outline-primary mt-2" (click)="openDialogImage()">Browse image</button>
+            </div>
+            <div class="progress mt-2 mb-2" *ngIf="isUploading">
+              <div class="progress-bar" role="progressbar" [style.width.%]="uploadPercent | async"  aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">{{uploadPercent | async}}%</div>
+            </div>
+            <div class="d-flex flex-row justify-content-around">
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" formControlName="face" id="face">
+                <label class="form-check-label" for="face">Face</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" formControlName="place" id="place">
+                <label class="form-check-label" for="place">Place</label>
+              </div>
+            </div>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" (click)="modal.close('Ok click')">Cancel</button>
+        <button type="submit" class="btn btn-outline-dark" [disabled]="!uploadForm.valid">Upload</button>
+      </div>
+    </form>
+  </ng-template>
+  <div class="message">
+    <ngb-alert  *ngIf="successMessage" type="success" (close)="successMessage = ''">{{ successMessage }}</ngb-alert>
+  </div>
+
+  <ng-template #previewImage let-modal>
+    <div class="modal-header">
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="d-flex flex-column justify-content-center">
+        <div class="card photo-column">
+          <img [src]="imagePreviewDetails?.imageUrl" class="card-img-top photo-preview" [alt]="imagePreviewDetails?.filename">
+        </div>
+      </div>
+      <div class="m-2">
+        <div class="d-flex">
+          <p class="mx-2">Image Name : </p>
+          <p class="mx-2">{{imagePreviewDetails?.filename}}</p>
+        </div>
+        <div class="d-flex">
+          <p class="mx-2">Image uploaded on : </p>
+          <p class="mx-2">{{imagePreviewDetails?.timestamp | date: 'dd-MMM-yyyy'}}</p>
+        </div>
+        <div class="d-flex">
+          <p class="mx-2">Image capture on : </p>
+          <p class="mx-2">{{imagePreviewDetails?.imageTime | date: 'dd-MMM-yyyy'}}</p>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-primary" (click)="share(imagePreviewDetails)">Share</button>
+      <button type="button" class="btn btn-danger" (click)="deleteImage()">Delete</button>
+    </div>
+  </ng-template>
+</div>

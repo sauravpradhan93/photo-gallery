@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "paintadvisor-3b4b3": {
+      "hosting": {
+        "PhotoApp": [
+          "paintadvisor-3b4b3"
+        ]
+      }
+    }
+  }
+}
